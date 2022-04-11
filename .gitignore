@@ -1,0 +1,12 @@
+.idea
+*.iml
+*/.vs
+out
+gen
+*/bin
+*/obj
+*/Migrations
+*.db
+*.db-shm
+*.db-wal
+*.txt

@@ -1,0 +1,108 @@
+﻿@page "/play"
+@using FakeCitySite.Shared
+@inject HttpClient http
+
+<MudText Align="Align.Center">
+    <h1>Which of these cities is real?</h1>
+</MudText>
+<div class="mt-12 mx-6">
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="6">
+            <MudPaper Elevation="4" @onclick="(async () => { await CardClicked(0); })" Class="pa-3" Style=@($"background:{Cards[0].BackgroundColor}; cursor: pointer")>
+                <MudText>@Cards[0].City.Name</MudText>
+                <MudText></MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="6">
+            <MudPaper Elevation="4" @onclick="(async () => { await CardClicked(1); })" Class="pa-3" Style=@($"background:{Cards[1].BackgroundColor}; cursor: pointer")>
+                <MudText>@Cards[1].City.Name</MudText>
+                <MudText></MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="4">
+            <MudStack Justify="Justify.Center">
+                <MudText Align="Align.Center" GutterBottom="true">@winOrLose</MudText>
+                <MudButton @onclick="async () => {await ResetCards();}" Variant="Variant.Filled">Next</MudButton>
+            </MudStack>
+        </MudItem>
+    </MudGrid>
+</div>
+
+@code {
+    private CityCard[] Cards;
+    private City[]? nextCityPair;
+    private string winOrLose = "";
+
+    private Random random = new Random();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var placeholder = new City() {Name = "Loading..."};
+        Cards = new[] {new CityCard() {City = placeholder}, new CityCard() {City = placeholder}};
+        await GetNewCityPair();
+        UpdateCityPair();
+    }
+
+    private async Task CardClicked(int which)
+    {
+        if (Cards[0].City.IsReal)
+        {
+            winOrLose = which == 0 ? "Correct!" : "Wrong!"; //probably a better way of doing this
+            Cards[0].BackgroundColor = Colors.Green.Default;
+            Cards[1].BackgroundColor = Colors.Red.Default;
+        }
+        else
+        {
+            winOrLose = which == 1 ? "Correct!" : "Wrong!";
+            Cards[0].BackgroundColor = Colors.Red.Default;
+            Cards[1].BackgroundColor = Colors.Green.Default;
+        }
+        if (which == 0)
+        {
+            await http.PatchAsync($"api/cities/incrementtimeschosen/{Cards[0].City.Id}", null);
+        }
+        else
+        {
+            await http.PatchAsync($"api/cities/incrementtimeschosen/{Cards[1].City.Id}", null);
+        }
+    }
+    
+    private async Task ResetCards()
+    {
+        winOrLose = "";
+        await GetNewCityPair();
+        UpdateCityPair();
+    }
+
+    private async Task GetNewCityPair()
+    {
+        var cityArrayFromApi = await http.GetFromJsonAsync<City[]>("api/cities/getpair");
+        if (cityArrayFromApi is null || cityArrayFromApi.Length != 2)
+        {
+            throw new Exception("Could not get city pair");
+        }
+        nextCityPair = cityArrayFromApi;
+        if (random.Next(0, 2) == 0)
+        {
+            (nextCityPair[0], nextCityPair[1]) = (nextCityPair[1], nextCityPair[0]);
+        }
+    }
+
+    private void UpdateCityPair()
+    {
+        if (nextCityPair is null) return;
+        Cards[0].City = nextCityPair[0];
+        Cards[1].City = nextCityPair[1];
+        nextCityPair = null;
+        Cards[0].BackgroundColor = Colors.Grey.Lighten4;
+        Cards[1].BackgroundColor = Colors.Grey.Lighten4;
+    }
+
+    private class CityCard
+    {
+        public City City { get; set; }
+        public string BackgroundColor { get; set; }
+        public string TextColor { get; set; }
+    }
+
+}
