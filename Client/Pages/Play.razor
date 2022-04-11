@@ -1,5 +1,6 @@
 ﻿@page "/play"
 @using FakeCitySite.Shared
+@using MudBlazor.Utilities
 @inject HttpClient http
 
 <MudText Align="Align.Center">
@@ -9,14 +10,20 @@
     <MudGrid Justify="Justify.Center">
         <MudItem xs="6">
             <MudPaper Elevation="4" @onclick="(async () => { await CardClicked(0); })" Class="pa-3" Style=@($"background:{Cards[0].BackgroundColor}; cursor: pointer")>
-                <MudText>@Cards[0].City.Name</MudText>
-                <MudText></MudText>
+                <MudText Inline="true">@Cards[0].City.Name</MudText>
+                @if (Cards[0].City.Country != null)
+                {
+                    <MudText Inline="true" Style=@($"color: {Colors.Grey.Darken1}")>, @Cards[0].City.Country</MudText>
+                }
             </MudPaper>
         </MudItem>
         <MudItem xs="6">
             <MudPaper Elevation="4" @onclick="(async () => { await CardClicked(1); })" Class="pa-3" Style=@($"background:{Cards[1].BackgroundColor}; cursor: pointer")>
-                <MudText>@Cards[1].City.Name</MudText>
-                <MudText></MudText>
+                <MudText Inline="true">@Cards[1].City.Name</MudText>
+                @if (Cards[1].City.Country != null)
+                {
+                    <MudText Inline="true" Style=@($"color: {Colors.Grey.Darken1}")>, @Cards[1].City.Country</MudText>
+                }
             </MudPaper>
         </MudItem>
         <MudItem xs="4">
