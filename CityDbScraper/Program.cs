@@ -23,15 +23,19 @@ if (args.Contains("--update"))
             }
 
             string[] parts = line.Split('/');
-            if (db.Cities.Any(c => c.Name == parts[0]))
+            string first = parts[0][1].ToString();
+            string newname = first.ToUpper() + parts[0][2..];
+            
+            if (db.Cities.Any(c => c.Name == newname))
             {
                 Console.WriteLine("City already existed...");
             }
             else
             {
+
                 var newcity = new City
                 {
-                    Name = parts[0][1..],
+                    Name = newname,
                     IsReal = parts[1] == "real",
                     Region = parts[2].ToLower()
                 };
@@ -154,6 +158,11 @@ static string AbbreviationToCountryName(string abbreviation)
         "GR" => "Greece",
         "MK" => "Macedonia",
         "IT" => "Italy",
+        "MX" => "Mexico",
+        "ES" => "Spain",
+        "RU" => "Russia",
+        "MD" => "Moldova",
+        "RO" => "Romania",
         _ => "Error"
     };
 

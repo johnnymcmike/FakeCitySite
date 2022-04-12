@@ -1,0 +1,26 @@
+﻿@using FakeCitySite.Shared
+<MudPaper Elevation="4" @onclick="CardClickedCallback" Class="pa-3" Style=@($"background:{BackgroundColor}; cursor: pointer")>
+                <MudText Inline="true">@City?.Name</MudText>
+                @if(City?.Country != null)
+                {
+                    <MudText Inline="true">, @City.Country</MudText>
+                }
+            </MudPaper>
+@code {
+    [Parameter]
+    public EventCallback CardClickedCallback { get; set; }
+    
+    [Parameter]
+    public City City { get; set; }
+
+    public string BackgroundColor { get; set; } = Color.Inherit.ToString();
+    
+    public bool RevealTruth()
+    {
+        if (City.IsReal)
+            BackgroundColor = Colors.Green.Default;
+        else
+            BackgroundColor = Colors.Red.Default;
+        return City.IsReal;
+    }
+}
