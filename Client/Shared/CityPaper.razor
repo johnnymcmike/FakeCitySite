@@ -1,9 +1,24 @@
 ﻿@using FakeCitySite.Shared
 <MudPaper Elevation="4" @onclick="CardClickedCallback" Class="pa-3" Style=@($"background:{BackgroundColor}; cursor: pointer")>
-                <MudText Inline="true">@City?.Name</MudText>
+    <MudText Style="color: whitesmoke" Inline="true">@City?.Name</MudText>
                 @if(City?.Country != null)
                 {
-                    <MudText Inline="true">, @City.Country</MudText>
+                    <MudText Style="color: #b5b5b5" Inline="true">, @City.Country</MudText>
+                }
+                else
+                {
+                    <MudText Style="color: #b5b5b5" Inline="true"> (Unspecified)</MudText>
+                }
+                @if (revealed)
+                {
+                    @if (!City.IsReal)
+                    {
+                        <MudText Style="color: whitesmoke">This has fooled @City.TimesChosen people!</MudText>
+                    }
+                    else
+                    {
+                        <MudText Style="color: whitesmoke">@City.TimesChosen other people recognized this real city</MudText>
+                    }
                 }
             </MudPaper>
 @code {
@@ -13,7 +28,9 @@
     [Parameter]
     public City City { get; set; }
 
-    public string BackgroundColor { get; set; } = Color.Inherit.ToString();
+    public string BackgroundColor { get; set; } = Color.Tertiary.ToString();
+
+    private bool revealed;
     
     public bool RevealTruth()
     {
@@ -21,6 +38,13 @@
             BackgroundColor = Colors.Green.Default;
         else
             BackgroundColor = Colors.Red.Default;
+        revealed = true;
         return City.IsReal;
+    }
+
+    public void Reset()
+    {
+        revealed = false;
+        BackgroundColor = Colors.DeepPurple.Darken2;
     }
 }
