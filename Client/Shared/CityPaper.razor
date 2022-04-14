@@ -1,43 +1,45 @@
 ﻿@using FakeCitySite.Shared
 <MudPaper Elevation="4" @onclick="CardClickedCallback" Class="pa-3" Style=@($"background:{BackgroundColor}; cursor: pointer")>
     <MudText Style="color: whitesmoke" Inline="true">@City?.Name</MudText>
-                @if(City?.Country != null)
-                {
-                    <MudText Style="color: #b5b5b5" Inline="true">, @City.Country</MudText>
-                }
-                else
-                {
-                    <MudText Style="color: #b5b5b5" Inline="true"> (Unspecified)</MudText>
-                }
-                @if (revealed)
-                {
-                    @if (!City.IsReal)
-                    {
-                        <MudText Style="color: whitesmoke">This has fooled @City.TimesChosen people!</MudText>
-                    }
-                    else
-                    {
-                        <MudText Style="color: whitesmoke">@City.TimesChosen other people recognized this real city</MudText>
-                    }
-                }
-            </MudPaper>
+    @if (City?.Country != null)
+    {
+        <MudText Style="color: #b5b5b5" Inline="true">, @City.Country</MudText>
+    }
+    else
+    {
+        <MudText Style="color: #b5b5b5" Inline="true"> (Unspecified)</MudText>
+    }
+    <MudText Style=@($"color: {revealedTextColor}")>@revealedText</MudText>
+</MudPaper>
+
 @code {
+
     [Parameter]
     public EventCallback CardClickedCallback { get; set; }
-    
+
     [Parameter]
     public City City { get; set; }
 
     public string BackgroundColor { get; set; } = Color.Tertiary.ToString();
 
     private bool revealed;
-    
+
+    private string revealedText = ".";
+    private string revealedTextColor = Colors.DeepPurple.Darken2;
+
     public bool RevealTruth()
     {
         if (City.IsReal)
+        {
             BackgroundColor = Colors.Green.Default;
+            revealedText = $"{City.TimesChosen} other people recognized this real city";
+        }
         else
+        {
             BackgroundColor = Colors.Red.Default;
+            revealedText = $"This fooled {City.TimesChosen} people!";
+        }
+        revealedTextColor = Colors.Shades.White;
         revealed = true;
         return City.IsReal;
     }
@@ -46,5 +48,8 @@
     {
         revealed = false;
         BackgroundColor = Colors.DeepPurple.Darken2;
+        revealedText = ".";
+        revealedTextColor = Colors.DeepPurple.Darken2;
     }
+
 }

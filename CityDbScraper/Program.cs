@@ -1,10 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Net.Http.Json;
 using FakeCitySite.Server.Data;
 using FakeCitySite.Shared;
-using Microsoft.EntityFrameworkCore.Sqlite;
-using Newtonsoft.Json.Linq;
 
 CityContext db = new CityContext("Data Source=Cities.db");
 Console.WriteLine("Hello, World!");
@@ -59,7 +56,7 @@ if (args.Contains("--update"))
 else if (args.Contains("--getcountrynames"))
 {
     var cities = db.Cities.Where(x => x.Country != null).ToList();
-    cities.ForEach(c => c.Country = AbbreviationToCountryName(c.Country.ToUpper()));
+    cities.ForEach(c => c.Country = AbbreviationToCountryName(c.Country.ToUpper().Trim()));
     db.SaveChanges();
 }
 
@@ -163,6 +160,8 @@ static string AbbreviationToCountryName(string abbreviation)
         "RU" => "Russia",
         "MD" => "Moldova",
         "RO" => "Romania",
+        "CH" => "Switzerland",
+        "NO" => "Norway",
         _ => "Error"
     };
 

@@ -1,22 +1,21 @@
 ﻿@inherits LayoutComponentBase
 
 <MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme"/>
-<MudDialogProvider />
-<MudSnackbarProvider />
+<MudDialogProvider/>
+<MudSnackbarProvider/>
 
 <MudLayout>
     <MudAppBar Elevation="0">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <MudSpacer />
-        <MudIconButton Icon="@Icons.Filled.DarkMode" Color="Color.Inherit" OnClick="() => {_isDarkMode = !_isDarkMode;}"></MudIconButton>
-        <MudIconButton Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Inherit" Link="https://mudblazor.com/" Target="_blank" />
-        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/MudBlazor/MudBlazor/" Target="_blank" />
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@(e => DrawerToggle())"/>
+        <MudSpacer/>
+        <MudIconButton Icon="@Icons.Filled.DarkMode" Color="Color.Inherit" OnClick="() => { _isDarkMode = !_isDarkMode; }"></MudIconButton>
+        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/johnnymcmike/FakeCitySite" Target="_blank"/>
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
         <MudDrawerHeader>
-            <MudText Typo="Typo.h6">FakeCitySite.Client</MudText>
+            <MudText Typo="Typo.h6">Impostown</MudText>
         </MudDrawerHeader>
-        <NavMenu />
+        <NavMenu/>
     </MudDrawer>
     <MudMainContent>
         <MudContainer MaxWidth="MaxWidth.Large" Class="my-8 pt-8">
@@ -26,11 +25,13 @@
 </MudLayout>
 
 @code {
-    MudTheme _theme = new();
+    readonly MudTheme _theme = new();
     bool _drawerOpen = true;
     bool _isDarkMode = true;
+
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
     }
+
 }

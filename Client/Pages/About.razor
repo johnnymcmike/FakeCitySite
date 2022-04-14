@@ -1,6 +1,19 @@
 ﻿@page "/about"
-<h3>About</h3>
-
+<h1>About</h1>
+<h2>How It's Made</h2>
+<h4>What Frameworks?</h4>
+This site was made as a learning project in my free time. It uses MudBlazor, ASP.NET Core, and Entity Framework in order
+to use purely C# for the entire stack, as that's my favorite language and I'm not that good at Javascript yet.
+Someday I might rewrite it in React, as Blazor is kind of huge and bandwidth isn't free.
+<h4>Where's The Data From?</h4>
+I actually didn't use an API or anything to get the cities. Me and my friends typed them all out manually in a Discord channel,
+using specific formatting, which I then downloaded as a .txt and scraped into the database. As such, there might be quirks or inaccuracies: all of the cities with "(Unspecified)" as the country are where we forgot to put that in our message.
+I also don't store any specific location data for the cities, so the Google Map you see is just querying by the city name
+and its country. This can lead to some funny bugs where cities like "Pasta, Greece" show up as the closest greek restaurant to you, but it's not that big of a deal, so I'm planning on keeping it like this for now.
+<h2>Feedback</h2>
+If you know that one of my cities is wrong, or you have any other suggestions or bugs to report, just email me at <a href="mailto:nihj2dx63@mozmail.com">nihj2dx63@mozmail.com</a>. Thanks :)
+<h2>Source Code</h2>
+Click the little github button in the top right.
 @code {
 
 }

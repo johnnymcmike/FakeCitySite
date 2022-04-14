@@ -7,26 +7,37 @@
 </MudText>
 <div class="mt-12 mx-6">
     <MudGrid Justify="Justify.Center">
-        <MudItem xs="6">
+        <MudItem sm="6" xs="12">
             <CityPaper @ref="cityCards[0]" CardClickedCallback="async () => { await CardClicked(0); }"> </CityPaper>
         </MudItem>
-        <MudItem xs="6">
+        <MudItem sm="6" xs="12">
             <CityPaper @ref="cityCards[1]" CardClickedCallback="async () => { await CardClicked(1); }"> </CityPaper>
         </MudItem>
-        <MudItem xs="4">
+        <MudItem sm="4" xs="6">
             <MudStack Justify="Justify.Center">
                 <MudText Align="Align.Center" GutterBottom="true">@winOrLose</MudText>
-                <MudButton @onclick="async () => { await ResetCards(); }" Variant="Variant.Filled" Disabled="!hasChosen">Next</MudButton>
+                <MudButton @onclick="async () => { await ResetCards(); }" Color="Color.Secondary" Variant="Variant.Filled" Disabled="!hasChosen">Next</MudButton>
             </MudStack>
         </MudItem>
-        <MudItem xs="4">
-            <MudText>Current streak: @streak</MudText>
-            <MudText>Highest streak: @highestStreak</MudText>
+        <MudItem sm="2" xs="6">
+            <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudText Align="Align.Center">Current streak: @streak</MudText>
+                <MudText Align="Align.Center">Highest streak: @highestStreak</MudText>
+            </MudStack>
         </MudItem>
-        <MudItem xs="12">
-            <iframe width="600" height="600" style="border:0" allowfullscreen
-                    src=@($"https://www.google.com/maps/embed/v1/place?&key=nicetry&q={mapQueryString}&zoom=7")>
-            </iframe>
+        <MudItem sm="4" xs="12">
+            <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudText Align="Align.Center">Accuracy: @Accuracy%</MudText>
+                <MudSwitch @bind-Checked="@showMap" Color="Color.Secondary">Show Map</MudSwitch>
+            </MudStack>
+        </MudItem>
+        <MudItem sm="12">
+            @if (showMap)
+            {
+                <iframe width="600" height="600" style="border:0" allowfullscreen
+                        src=@($"https://www.google.com/maps/embed/v1/place?&key=nicetry&q={mapQueryString}&zoom=7")>
+                </iframe>
+            }
         </MudItem>
     </MudGrid>
 </div>
@@ -39,6 +50,19 @@
     private int highestStreak;
     private int totalWrong;
     private int totalRight;
+    public bool showMap = true;
+
+    private double Accuracy
+    {
+        get
+        {
+            if (totalWrong == 0)
+                return 100;
+            double result = (double) totalRight / (totalRight + totalWrong) * 100;
+            return Math.Round(result, 2);
+        }
+    }
+
     private readonly CityPaper[] cityCards = new CityPaper[2];
     private int trueIndex;
     private string mapQueryString = "New York, NY";
@@ -52,6 +76,8 @@
 
     private async Task CardClicked(int which)
     {
+        if (hasChosen)
+            return;
         if (cityCards[0].RevealTruth())
         {
             trueIndex = 0;
