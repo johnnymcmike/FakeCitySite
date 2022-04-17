@@ -61,6 +61,10 @@ else if (args.Contains("--getcountrynames"))
     var usCities = cities.Where(x => x.UsState != null && x.UsState.Length == 2).ToList();
     usCities.ForEach(c => c.UsState = AbbreviationToUsStateName(c.UsState.ToUpper().Trim()));
     db.SaveChanges();
+
+    var usCities = cities.Where(x => x.UsState != null && x.UsState.Length == 2).ToList();
+    usCities.ForEach(c => c.UsState = AbbreviationToUsStateName(c.UsState.ToUpper().Trim()));
+    db.SaveChanges();
 }
 
 static string AbbreviationToCountryName(string abbreviation)
