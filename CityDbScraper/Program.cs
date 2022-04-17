@@ -55,7 +55,7 @@ if (args.Contains("--update"))
 }
 else if (args.Contains("--getcountrynames"))
 {
-    var cities = db.Cities.Where(x => x.Country != null).ToList();
+    var cities = db.Cities.Where(x => x.Country != null && x.Country.Length == 2).ToList();
     cities.ForEach(c => c.Country = AbbreviationToCountryName(c.Country.ToUpper().Trim()));
     db.SaveChanges();
 }
