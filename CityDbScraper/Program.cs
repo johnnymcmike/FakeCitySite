@@ -57,6 +57,9 @@ else if (args.Contains("--getcountrynames"))
 {
     var cities = db.Cities.Where(x => x.Country != null && x.Country.Length == 2).ToList();
     cities.ForEach(c => c.Country = AbbreviationToCountryName(c.Country.ToUpper().Trim()));
+
+    var usCities = cities.Where(x => x.UsState != null && x.UsState.Length == 2).ToList();
+    usCities.ForEach(c => c.UsState = AbbreviationToUsStateName(c.UsState.ToUpper().Trim()));
     db.SaveChanges();
 }
 
@@ -166,4 +169,65 @@ static string AbbreviationToCountryName(string abbreviation)
     };
 
     return countryName;
+}
+
+static string AbbreviationToUsStateName(string abbreviation)
+{
+    //Takes in the US postal code for a given state, and then returns the full name of that state.
+    string statename = abbreviation switch
+    {
+        "AL" => "Alabama",
+        "AK" => "Alaska",
+        "AZ" => "Arizona",
+        "AR" => "Arkansas",
+        "CA" => "California",
+        "CO" => "Colorado",
+        "CT" => "Connecticut",
+        "DE" => "Delaware",
+        "DC" => "District Of Columbia",
+        "FL" => "Florida",
+        "GA" => "Georgia",
+        "HI" => "Hawaii",
+        "ID" => "Idaho",
+        "IL" => "Illinois",
+        "IN" => "Indiana",
+        "IA" => "Iowa",
+        "KS" => "Kansas",
+        "KY" => "Kentucky",
+        "LA" => "Louisiana",
+        "ME" => "Maine",
+        "MD" => "Maryland",
+        "MA" => "Massachusetts",
+        "MI" => "Michigan",
+        "MN" => "Minnesota",
+        "MS" => "Mississippi",
+        "MO" => "Missouri",
+        "MT" => "Montana",
+        "NE" => "Nebraska",
+        "NV" => "Nevada",
+        "NH" => "New Hampshire",
+        "NJ" => "New Jersey",
+        "NM" => "New Mexico",
+        "NY" => "New York",
+        "NC" => "North Carolina",
+        "ND" => "North Dakota",
+        "OH" => "Ohio",
+        "OK" => "Oklahoma",
+        "OR" => "Oregon",
+        "PA" => "Pennsylvania",
+        "RI" => "Rhode Island",
+        "SC" => "South Carolina",
+        "SD" => "South Dakota",
+        "TN" => "Tennessee",
+        "TX" => "Texas",
+        "UT" => "Utah",
+        "VT" => "Vermont",
+        "VA" => "Virginia",
+        "WA" => "Washington",
+        "WV" => "West Virginia",
+        "WI" => "Wisconsin",
+        "WY" => "Wyoming",
+        _ => "Error"
+    };
+    return statename;
 }
