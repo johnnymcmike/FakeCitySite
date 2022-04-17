@@ -58,8 +58,9 @@ else if (args.Contains("--getcountrynames"))
     var cities = db.Cities.Where(x => x.Country != null && x.Country.Length == 2).ToList();
     cities.ForEach(c => c.Country = AbbreviationToCountryName(c.Country.ToUpper().Trim()));
 
-    var usCities = cities.Where(x => x.UsState != null && x.UsState.Length == 2).ToList();
+    var usCities = db.Cities.Where(x => x.UsState != null && x.UsState.Length == 2).ToList();
     usCities.ForEach(c => c.UsState = AbbreviationToUsStateName(c.UsState.ToUpper().Trim()));
+    
     db.SaveChanges();
 }
 
