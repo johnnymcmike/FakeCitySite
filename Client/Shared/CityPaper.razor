@@ -1,14 +1,6 @@
 ﻿@using FakeCitySite.Shared
 <MudPaper Elevation="4" @onclick="CardClickedCallback" Class="pa-3" Style=@($"background:{BackgroundColor}; cursor: pointer")>
-    <MudText Style="color: whitesmoke" Inline="true">@City?.Name</MudText>
-    @if (City?.Country != null)
-    {
-        <MudText Style="color: #b5b5b5" Inline="true">, @City.Country</MudText>
-    }
-    else
-    {
-        <MudText Style="color: #b5b5b5" Inline="true"> (Unspecified)</MudText>
-    }
+    <MudText Style="color: whitesmoke" Inline="true">@City?.GetFullName()</MudText>
     <MudText Style=@($"color: {revealedTextColor}")>@revealedText</MudText>
 </MudPaper>
 

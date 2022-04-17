@@ -19,4 +19,15 @@ public class City
     public string? UsState { get; set; }
     
     public int TimesChosen { get; set; }
+
+    public string GetFullName()
+    {
+        if (Country is null)
+            return Name;
+
+        if (UsState is not null)
+            return $"{Name}, {UsState}";
+
+        return $"{Name}, {Country}";
+    }
 }

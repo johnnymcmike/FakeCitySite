@@ -1,7 +1,45 @@
 ﻿@page "/stats"
+@using FakeCitySite.Shared
+@inject HttpClient Http
+
 <h1>Stats</h1>
-Coming Soon
+No cheating!
+<MudGrid Class="my-4">
+    <MudItem xs="6">
+        <MudTable Style="border-radius: 10px" Dense="true" Height="200px" HorizontalScrollbar="true" Items="@top10Fake">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh># Fooled</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">@context.GetFullName()</MudTd>
+                <MudTd DataLabel="Times Fooled">@context.TimesChosen</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudItem>
+    <MudItem xs="6">
+        <MudTable Style="border-radius: 10px" Dense="true" Height="200px" HorizontalScrollbar="true" Items="@top10Real">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh># Recognized</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">@context.GetFullName()</MudTd>
+                <MudTd DataLabel="Times Recognized">@context.TimesChosen</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudItem>
+</MudGrid>
+More detailed stats coming soon once I have more data :)
 
 @code {
+    IEnumerable<City>? top10Fake;
+    IEnumerable<City>? top10Real;
+
+    protected override async Task OnInitializedAsync()
+    {
+        top10Fake = await Http.GetFromJsonAsync<IEnumerable<City>>("/api/cities/top10fake");
+        top10Real = await Http.GetFromJsonAsync<IEnumerable<City>>("/api/cities/top10real");
+    }
 
 }
